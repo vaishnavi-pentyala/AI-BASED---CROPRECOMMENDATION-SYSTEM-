@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgriXAI – Smart Soil. Smart Crops.</title>
+  <link rel="stylesheet" href="pythonproject.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="navbar">
+    <div class="logo">Agri<span>X</span>AI</div>
+    <select id="langSelect" onchange="changeLang(this.value)">
+      <option value="en">🇬🇧 English</option>
+      <option value="te">🇮🇳 తెలుగు</option>
+      <option value="hi">🇮🇳 हिन्दी</option>
+    </select>
+  </nav>
+
+  <!-- STEP DOTS -->
+  <div class="step-dots" id="stepDots" style="display:none;">
+    <div class="dot" id="dot0"></div>
+    <div class="dot" id="dot1"></div>
+    <div class="dot" id="dot2"></div>
+  </div>
+
+  <!-- ===== PAGE: HOME ===== -->
+  <section id="page-home" class="page active container">
+
+
+<div class="slideshow">
+
+<div class="slide">
+<img src="https://miro.medium.com/v2/resize:fit:1100/format:webp/1*Uc1E8owcNl0nuO88XjWRAg.jpeg" >
+</div>
+
+<div class="slide">
+<img src="https://ars.els-cdn.com/content/image/1-s2.0-S2405844024011435-ga1.jpg">
+</div>
+
+<div class="slide">
+<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2-XnWcisRfsyuykzCP2LjKUuVMpIKMFQskA&s" >
+</div>
+
+<div class="slide">
+  <img src="https://images-provider.frontiersin.org/api/ipx/f=webp/https://www.frontiersin.org/files/Articles/1417912/xml-images/fpls-15-1417912-g001.webp" >
+</div>
+
+</div>
+
+<div class="dots">
+<span class="dot" onclick="currentSlide(1)"></span>
+<span class="dot" onclick="currentSlide(2)"></span>
+<span class="dot" onclick="currentSlide(3)"></span>
+<span class="dot" onclick="currentSlide(4)"></span>
+</div>
+
+
+    <div class="hero">
+      <div class="hero-icon">🌾</div>
+      <h1 class="brand-title">AgriXAI</h1>
+      <p class="tagline" data-key="tagline">Smart Soil. Smart Crops.</p>
+      <p class="subtitle" data-key="subtitle">AI-powered crop recommendations for every farmer</p>
+      <button class="btn-primary pulse" onclick="goTo('location')" data-key="startBtn">🚀 Start Analysis</button>
+    </div>
+    <div class="feature-grid">
+      <div class="feature-card"><div class="f-icon">🌍</div><div class="f-label">Live Location</div></div>
+      <div class="feature-card"><div class="f-icon">📸</div><div class="f-label">Soil Image AI</div></div>
+      <div class="feature-card"><div class="f-icon">🧪</div><div class="f-label">Soil Analysis</div></div>
+      <div class="feature-card"><div class="f-icon">🌱</div><div class="f-label">Crop Advice</div></div>
+    </div>
+  </section>
+
+  <!-- ===== PAGE: LOCATION ===== -->
+  <section id="page-location" class="page container">
+    <h2 class="section-title" data-key="locationTitle">Your Location</h2>
+    <p class="section-desc" data-key="locationDesc">We need your location to fetch live climate data</p>
+
+    <div class="form-group">
+      <button class="btn-primary" id="locBtn" onclick="detectLocation()" data-key="allowLocation">📍 Use My Location</button>
+    </div>
+
+    <div class="divider" data-key="manualLocation">Or enter manually</div>
+
+    <div class="form-group">
+      <input class="input-field" id="manualLoc" type="text" placeholder="e.g. Hyderabad, Telangana" data-key-placeholder="locationPlaceholder" />
+    </div>
+
+    <div class="form-group" style="margin-top:8px;">
+      <button class="btn-primary" onclick="goToUpload()" data-key="continueBtn">Continue →</button>
+    </div>
+  </section>
+
+  <!-- ===== PAGE: UPLOAD ===== -->
+  <section id="page-upload" class="page container">
+    <h2 class="section-title" data-key="uploadTitle">Upload Soil Image</h2>
+    <p class="section-desc" data-key="uploadDesc">Take a clear photo of your soil sample</p>
+
+    <label class="upload-zone" id="uploadZone" for="soilImg">
+      <div id="uploadPlaceholder">
+        <div style="font-size:3rem;margin-bottom:12px;">📁</div>
+        <div class="upload-label" data-key="uploadBtn">Choose Image</div>
+        <div class="upload-hint">JPG, PNG supported</div>
+      </div>
+      <img id="imgPreview" src="" alt="preview" style="display:none;" />
+    </label>
+    <input type="file" id="soilImg" accept="image/*" style="display:none;" onchange="previewImage(event)" />
+
+    <div class="form-group" style="margin-top:14px;">
+      <button class="btn-secondary" data-key="cameraBtn">📷 Use Camera</button>
+    </div>
+    <div class="form-group" style="margin-top:10px;">
+      <button class="btn-primary" id="analyzeBtn" onclick="startAnalysis()" data-key="analyzeBtn" style="opacity:0.5;pointer-events:none;">🔬 Analyze Soil</button>
+    </div>
+  </section>
+
+  <!-- ===== PAGE: ANALYZING ===== -->
+  <section id="page-analyzing" class="page container" style="text-align:center;padding-top:80px;">
+    <div class="spin-icon">⚙️</div>
+    <h2 class="section-title" style="margin-top:24px;" data-key="detecting">Analyzing your soil...</h2>
+    <p class="section-desc">Please wait a moment</p>
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">0%</div>
+  </section>
+
+  <!-- ===== PAGE: RESULTS ===== -->
+  <section id="page-results" class="page container">
+    <h2 class="section-title">🎯 <span data-key="resultsTitle">Your Results</span></h2>
+
+    <!-- Soil Type -->
+    <div class="card row-card">
+      <div class="soil-color-box" id="soilColorBox"></div>
+      <div>
+        <div class="card-label" data-key="soilType">Soil Type</div>
+        <div class="card-value" id="soilTypeVal">—</div>
+      </div>
+    </div>
+
+    <!-- Confidence -->
+    <div class="card">
+      <div class="card-label" data-key="confidence">Confidence</div>
+      <div class="conf-row">
+        <div class="progress-bar flex1"><div class="progress-fill" id="confFill" style="width:0%"></div></div>
+        <div class="conf-pct" id="confPct">0%</div>
+      </div>
+    </div>
+
+    <!-- Soil Params -->
+    <div class="card">
+      <div class="card-label" data-key="soilParams">Soil Parameters</div>
+      <div class="param-grid">
+        <div class="param-chip"><div class="param-name">pH</div><div class="param-val" id="phVal">—</div></div>
+        <div class="param-chip"><div class="param-name">Nitrogen (N)</div><div class="param-val" id="nVal">—</div></div>
+        <div class="param-chip"><div class="param-name">Phosphorus (P)</div><div class="param-val" id="pVal">—</div></div>
+        <div class="param-chip"><div class="param-name">Potassium (K)</div><div class="param-val" id="kVal">—</div></div>
+      </div>
+    </div>
+
+    <!-- Climate -->
+    <div class="card">
+      <div class="card-label" data-key="climate">Climate Conditions</div>
+      <div class="climate-grid">
+        <div class="param-chip"><div style="font-size:1.6rem;">🌡️</div><div class="param-name" data-key="temp">Temperature</div><div class="param-val" id="tempVal">—</div></div>
+        <div class="param-chip"><div style="font-size:1.6rem;">💧</div><div class="param-name" data-key="humidity">Humidity</div><div class="param-val" id="humVal">—</div></div>
+        <div class="param-chip"><div style="font-size:1.6rem;">🌧️</div><div class="param-name" data-key="rainfall">Rainfall</div><div class="param-val" id="rainVal">—</div></div>
+      </div>
+    </div>
+
+    <!-- Recommended Crop -->
+    <div class="crop-card">
+      <div class="crop-badge" data-key="cropRec">✨ Recommended Crop</div>
+      <div class="crop-emoji" id="cropEmoji">🌿</div>
+      <div class="crop-name" id="cropName">—</div>
+    </div>
+
+    <!-- XAI -->
+    <div class="card xai-card">
+      <div class="xai-header">🔍 <span data-key="whyCrop">Why this crop?</span></div>
+      <p class="xai-text" id="xaiText">—</p>
+    </div>
+
+    <!-- Start Over -->
+    <div class="form-group" style="margin-top:8px;">
+      <button class="btn-secondary" onclick="startOver()" data-key="startOver">🔄 Start New Analysis</button>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">Agri<span>X</span>AI</div>
+      <p class="footer-sub" data-key="footer">AgriXAI — Empowering farmers with AI</p>
+      <div class="footer-grid">
+        <div>
+          <div class="footer-heading" data-key="about">About Project</div>
+          <p class="footer-text">AI-powered soil analysis and crop recommendation system for Indian farmers.</p>
+        </div>
+        <div>
+          <div class="footer-heading" data-key="contact">Contact</div>
+          <p class="footer-text">agrixai@example.com<br>+91 98765 43210</p>
+        </div>
+        <div>
+          <div class="footer-heading" data-key="team">Team</div>
+          <p class="footer-text">Developed by AgriXAI Research Team, Hyderabad.</p>
+        </div>
+      </div>
+      <div class="footer-copy">© 2024 AgriXAI · Made with 💚 for Indian Farmers</div>
+    </div>
+  </footer>
+  <script src="pythonproject.js"></script>
+</body>
+</html>
